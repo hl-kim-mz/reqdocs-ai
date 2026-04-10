@@ -76,6 +76,9 @@ export default function WorkspacePage() {
             } else if (event === 'done') {
               const reqs = data.requirements as StructuredRequirement[];
               setStructuredRequirements(reqs);
+              if (data.truncated) {
+                alert('입력이 너무 길어 앞 2000자만 분석했습니다.\n더 정확한 결과를 원하면 텍스트를 줄여서 다시 시도하세요.');
+              }
             } else if (event === 'error' && typeof data.message === 'string') {
               throw new Error(data.message);
             }
