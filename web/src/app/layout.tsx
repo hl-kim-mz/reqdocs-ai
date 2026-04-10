@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import NextAuthSessionProvider from '@/components/providers/SessionProvider';
 
 export const metadata: Metadata = {
   title: 'ReqDocs AI - 자동 문서 생성',
@@ -13,7 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
+      </body>
     </html>
   );
 }
