@@ -2,6 +2,7 @@
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import MermaidRenderer from './MermaidRenderer';
 
 interface MarkdownViewerProps {
   content: string;
@@ -38,14 +39,18 @@ export default function MarkdownViewer({ content }: MarkdownViewerProps) {
             li: ({ node, ...props }) => (
               <li className="text-slate-700" {...props} />
             ),
-            code: ({ node, inline, ...props }: any) => {
+            code: ({ node, inline, className, children, ...props }: any) => {
               if (inline) {
                 return (
-                  <code className="bg-slate-100 text-red-600 px-2 py-1 rounded text-sm font-mono" {...props} />
+                  <code className="bg-slate-100 text-red-600 px-2 py-1 rounded text-sm font-mono" {...props}>{children}</code>
                 );
               }
+              const language = /language-(\w+)/.exec(className || '')?.[1];
+              if (language === 'mermaid') {
+                return <MermaidRenderer chart={String(children).trim()} />;
+              }
               return (
-                <code className="block bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm" {...props} />
+                <code className="block bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4 font-mono text-sm" {...props}>{children}</code>
               );
             },
             pre: ({ node, ...props }) => (

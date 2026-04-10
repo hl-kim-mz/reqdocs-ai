@@ -53,3 +53,130 @@ MoSCoW 방식 우선순위:
 
 마크다운 테이블 형식으로만 작성하세요.`;
 }
+
+export function getFeatureSpecPrompt(rawInput: string): string {
+  return `당신은 소프트웨어 설계 전문가입니다. 다음 요구사항을 바탕으로 상세한 기능 명세서를 작성하세요.
+
+요구사항:
+${rawInput}
+
+각 주요 기능에 대해 다음 구조로 명세를 작성하세요:
+
+## 기능명
+
+### 개요
+- 기능 목적 및 요약
+
+### 사용자 스토리
+As a [사용자 유형], I want to [목표], so that [이유].
+
+### 입력 / 출력
+| 항목 | 설명 | 타입 | 필수 여부 |
+|------|------|------|---------|
+| ... | ... | ... | ... |
+
+### 처리 흐름
+1. 단계별 처리 순서
+
+### 예외 처리
+- 에러 케이스 및 처리 방법
+
+### 검증 조건 (Acceptance Criteria)
+- [ ] 조건 1
+- [ ] 조건 2
+
+---
+
+최소 5개 이상의 핵심 기능에 대해 위 형식으로 작성하세요.
+마크다운 형식으로 작성하세요.`;
+}
+
+export function getAPISpecPrompt(rawInput: string): string {
+  return `당신은 백엔드 API 설계 전문가입니다. 다음 요구사항을 바탕으로 REST API 명세서를 작성하세요.
+
+요구사항:
+${rawInput}
+
+다음 구조로 API 명세를 작성하세요:
+
+## API 개요
+- Base URL, 인증 방식, 응답 형식
+
+## 공통 규칙
+- 요청/응답 헤더, 에러 코드 규약
+
+## 엔드포인트 목록
+
+각 엔드포인트에 대해:
+
+### [METHOD] /endpoint/path
+**설명**: 기능 설명
+
+**요청**
+\`\`\`json
+{
+  "field": "type — 설명"
+}
+\`\`\`
+
+**응답 (200 OK)**
+\`\`\`json
+{
+  "field": "type — 설명"
+}
+\`\`\`
+
+**에러 응답**
+| 상태코드 | 설명 |
+|---------|------|
+| 400 | ... |
+| 401 | ... |
+
+---
+
+도메인별로 그룹화하고, 최소 10개 이상의 엔드포인트를 포함하세요.
+마크다운 형식으로 작성하세요.`;
+}
+
+export function getERDPrompt(rawInput: string): string {
+  return `당신은 데이터베이스 설계 전문가입니다. 다음 요구사항을 바탕으로 ERD를 Mermaid 다이어그램으로 작성하세요.
+
+요구사항:
+${rawInput}
+
+다음 형식으로 출력하세요:
+
+## ERD 설명
+주요 엔티티와 관계에 대한 간략한 설명 (3-5문장)
+
+## 엔티티 목록
+각 테이블의 주요 컬럼과 역할 설명
+
+| 테이블명 | 설명 | 주요 컬럼 |
+|---------|------|---------|
+| ... | ... | ... |
+
+## ERD 다이어그램
+
+\`\`\`mermaid
+erDiagram
+    ENTITY1 {
+        int id PK
+        string field1
+        string field2
+        datetime created_at
+    }
+    ENTITY2 {
+        int id PK
+        int entity1_id FK
+        string field1
+    }
+    ENTITY1 ||--o{ ENTITY2 : "has"
+\`\`\`
+
+## 관계 설명
+- 각 엔티티 간 관계의 의미와 카디널리티 설명
+
+관계 표기법: ||--o{ (one-to-many), }|--|{ (many-to-many), ||--|| (one-to-one)
+마크다운 형식으로 작성하세요.`;
+}

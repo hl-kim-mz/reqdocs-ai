@@ -37,14 +37,14 @@ cp .env.local.example .env.local   # ANTHROPIC_API_KEY 입력
 npm run dev                         # http://localhost:3000
 ```
 - [ ] 랜딩 → 입력 → 생성 → 결과 E2E 흐름 수동 확인
-- [ ] 스트리밍 이벤트 파싱 정상 동작 확인
+- [x] 스트리밍 이벤트 파싱 정상 동작 확인 (token 이벤트 → appendStream 버그 수정)
 - [ ] 생성된 문서 내용 품질 검토 (프롬프트 튜닝 필요 여부 판단)
 
 ### 🟡 Phase 2 — 나머지 3종 문서 추가
-- [ ] 기능 명세서 프롬프트 + 생성 로직 (`feature_spec`)
-- [ ] API 문서 프롬프트 + OpenAPI 형식 출력 (`api_spec`)
-- [ ] ERD 프롬프트 + Mermaid 출력 (`erd`)
-- [ ] MermaidRenderer 컴포넌트 구현 (mermaid.js + 줌/패닝)
+- [x] 기능 명세서 프롬프트 + 생성 로직 (`feature_spec`)
+- [x] API 문서 프롬프트 + OpenAPI 형식 출력 (`api_spec`)
+- [x] ERD 프롬프트 + Mermaid 출력 (`erd`)
+- [x] MermaidRenderer 컴포넌트 구현 (mermaid.js, MarkdownViewer 내 mermaid 코드블록 자동 감지)
 
 ### 🟡 Phase 3 — UX 고도화
 - [ ] 파일 업로드 (PDF/DOCX → 텍스트 추출)
@@ -81,6 +81,6 @@ npm run dev                         # http://localhost:3000
 
 ## 알려진 이슈 / 확인 필요
 
-- `useProjectStore.getState().streamText` 타입 — `streamText`가 `string`인지 `Record<DocType, string>`인지 확인 필요 (pipeline 연동 시)
-- SSE 이벤트 파싱: 멀티라인 chunk 분할 케이스 처리 검증 필요
-- Tailwind prose 클래스: `@tailwindcss/typography` 플러그인 설치 여부 확인
+- ~~`useProjectStore.getState().streamText` 타입~~ → `Record<DocType, string>` 확인됨, 정상
+- SSE 이벤트 파싱: 멀티라인 chunk 분할 케이스 처리 검증 필요 (로컬 E2E 테스트 시 확인)
+- ~~Tailwind prose 클래스: `@tailwindcss/typography` 플러그인 설치 여부 확인~~ → 설치 완료

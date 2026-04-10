@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { getPRDPrompt, getFeatureListPrompt } from './prompts';
+import { getPRDPrompt, getFeatureListPrompt, getFeatureSpecPrompt, getAPISpecPrompt, getERDPrompt } from './prompts';
 import type { DocType } from '../types';
 
 const client = new Anthropic({
@@ -19,15 +19,14 @@ export async function generateDocuments(
     onStep(docType, 'active');
 
     try {
-      let prompt = '';
-      if (docType === 'prd') {
-        prompt = getPRDPrompt(rawInput);
-      } else if (docType === 'feature_list') {
-        prompt = getFeatureListPrompt(rawInput);
-      } else {
-        // For other doc types, use a generic prompt
-        prompt = `사용자 요구사항을 바탕으로 ${docType}를 작성하세요:\n\n${rawInput}`;
-      }
+      const promptMap: Record<DocType, () => string> = {
+        prd: () => getPRDPrompt(rawInput),
+        feature_list: () => getFeatureListPrompt(rawInput),
+        feature_spec: () => getFeatureSpecPrompt(rawInput),
+        api_spec: () => getAPISpecPrompt(rawInput),
+        erd: () => getERDPrompt(rawInput),
+      };
+      const prompt = promptMap[docType]();
 
       let fullContent = '';
 

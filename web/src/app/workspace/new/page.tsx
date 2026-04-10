@@ -29,7 +29,17 @@ export default function WorkspacePage() {
     streamText,
     setGenerationSteps,
     updateDocument,
+    appendStream,
+    clearStream,
   } = useProjectStore();
+
+  const STEP_LABELS: Record<DocType, string> = {
+    prd: 'PRD 생성',
+    feature_list: '기능 목록 생성',
+    feature_spec: '기능 명세 생성',
+    api_spec: 'API 명세 생성',
+    erd: 'ERD 생성',
+  };
 
   const handleGenerate = async () => {
     if (!input.trim()) {
@@ -50,12 +60,13 @@ export default function WorkspacePage() {
 
     const projectId = createProject(title, input);
     setGenerating(true);
+    clearStream();
 
     // Initialize steps
     setGenerationSteps(
       docTypesToGenerate.map((type) => ({
         id: type,
-        label: type === 'prd' ? 'PRD 생성' : '기능 목록 생성',
+        label: STEP_LABELS[type],
         status: 'pending' as const,
       }))
     );
@@ -97,9 +108,9 @@ export default function WorkspacePage() {
                 const data = JSON.parse(dataLine.slice(6));
 
                 if (eventType === 'step') {
-                  // Handle step updates
+                  // Handle step updates (managed server-side)
                 } else if (eventType === 'token' && 'type' in data && 'token' in data) {
-                  // Tokens handled by streaming
+                  appendStream(data.type as DocType, data.token as string);
                 } else if (eventType === 'done' && 'type' in data) {
                   // Finalize document
                   const docType = data.type as DocType;

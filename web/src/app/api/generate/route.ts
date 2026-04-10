@@ -1,6 +1,14 @@
 import { generateDocuments } from '@/lib/ai/pipeline';
 import type { DocType } from '@/lib/types';
 
+const STEP_LABELS: Record<DocType, string> = {
+  prd: 'PRD 생성',
+  feature_list: '기능 목록 생성',
+  feature_spec: '기능 명세 생성',
+  api_spec: 'API 명세 생성',
+  erd: 'ERD 생성',
+};
+
 export async function POST(request: Request) {
   const { rawInput, projectId, docTypes } = await request.json() as {
     rawInput: string;
@@ -41,7 +49,7 @@ export async function POST(request: Request) {
         const stepEvent = `event: init\ndata: ${JSON.stringify({
           steps: docTypes.map((type) => ({
             id: type,
-            label: type === 'prd' ? 'PRD 생성' : '기능 목록 생성',
+            label: STEP_LABELS[type],
             status: 'pending',
           })),
         })}\n\n`;
