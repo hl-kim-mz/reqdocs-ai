@@ -37,10 +37,27 @@
 - [x] Step 라벨 전체 docType 대응
 - [x] **AbortController**: pipeline.ts signal 전달, route.ts request.signal 연결, new/page.tsx 취소 핸들러
 
-### 진행 중 (이번 세션)
+### 완료 (Phase 3)
 - [x] GenerationProgress 취소 버튼 UI
 - [x] 재생성 버튼 (뷰어 SidePanel)
 - [x] 인라인 편집 모드 (뷰어)
+
+### 완료 (Phase 4 — 인증)
+- [x] NextAuth v4 + Credentials provider (이메일/bcrypt)
+- [x] Prisma v7 + SQLite (dev.db 마이그레이션 완료)
+- [x] /register, /login 페이지
+- [x] /workspace/* 미들웨어 보호
+- [x] Topbar 유저 정보 + 로그아웃
+- [x] Landing "시작하기" → /register 연결
+- [x] next.config.ts → next.config.js (Next.js 14 호환)
+- [x] 개발 포트 4000 고정
+
+### 🔴 다음 세션 즉시 — 500 에러 수정
+- 증상: /register POST 시 500 에러
+- 의심 원인: Prisma v7 런타임에서 DATABASE_URL 미인식
+- 시도한 수정: `new PrismaClient({ datasourceUrl: process.env.DATABASE_URL })` → 미해결
+- 다음 시도: 터미널 에러 로그 확인 → Prisma v7 런타임 설정 재검토
+- 참고: dev.db 파일은 `web/` 루트에 생성됨 (`file:./dev.db`)
 
 ---
 
