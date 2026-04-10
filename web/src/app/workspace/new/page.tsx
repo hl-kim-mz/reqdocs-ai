@@ -15,6 +15,7 @@ export default function WorkspacePage() {
   const router = useRouter();
   const [title, setTitle] = useState('새 프로젝트');
   const [input, setInput] = useState('');
+  const [truncatedBanner, setTruncatedBanner] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const {
@@ -36,6 +37,7 @@ export default function WorkspacePage() {
 
     setStructuring(true);
     clearStructureProgress();
+    setTruncatedBanner(false);
     setCurrentRawInput(input);
 
     const controller = new AbortController();
@@ -77,7 +79,7 @@ export default function WorkspacePage() {
               const reqs = data.requirements as StructuredRequirement[];
               setStructuredRequirements(reqs);
               if (data.truncated) {
-                alert('입력이 너무 길어 앞 2000자만 분석했습니다.\n더 정확한 결과를 원하면 텍스트를 줄여서 다시 시도하세요.');
+                setTruncatedBanner(true);
               }
             } else if (event === 'error' && typeof data.message === 'string') {
               throw new Error(data.message);
@@ -153,6 +155,26 @@ export default function WorkspacePage() {
             />
           </div>
           <RequirementsEditor value={input} onChange={setInput} />
+
+          {truncatedBanner && (
+            <div className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              <span className="mt-0.5 shrink-0">⚠</span>
+              <div>
+                <p className="font-medium">입력이 너무 길어 앞 2000자만 분석했습니다.</p>
+                <p className="mt-0.5 text-amber-700 text-xs">
+                  더 정확한 결과를 원하면 텍스트를 2000자 이내로 줄인 뒤 다시 시도하세요.
+                </p>
+              </div>
+              <button
+                onClick={() => setTruncatedBanner(false)}
+                className="ml-auto shrink-0 text-amber-500 hover:text-amber-700"
+                aria-label="닫기"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           <AudioUpload
             onTranscribed={(text) =>
               setInput((prev) => prev ? `${prev}\n\n${text}` : text)
