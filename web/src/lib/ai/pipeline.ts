@@ -11,7 +11,8 @@ export async function generateDocuments(
   docTypes: DocType[],
   onStep: (stepId: string, status: 'active' | 'done' | 'error') => void,
   onToken: (type: DocType, token: string) => void,
-  onDone: (type: DocType) => void
+  onDone: (type: DocType) => void,
+  signal?: AbortSignal
 ) {
   const results: Record<DocType, string> = {} as Record<DocType, string>;
 
@@ -33,13 +34,8 @@ export async function generateDocuments(
       const stream = await client.messages.stream({
         model: 'claude-sonnet-4-6',
         max_tokens: 4096,
-        messages: [
-          {
-            role: 'user',
-            content: prompt,
-          },
-        ],
-      });
+        messages: [{ role: 'user', content: prompt }],
+      }, { signal });
 
       for await (const event of stream) {
         if (

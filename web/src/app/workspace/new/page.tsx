@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useProjectStore } from '@/store/useProjectStore';
 import AppShell from '@/components/layout/AppShell';
@@ -13,6 +13,7 @@ export default function WorkspacePage() {
   const router = useRouter();
   const [title, setTitle] = useState('새 프로젝트');
   const [input, setInput] = useState('');
+  const abortControllerRef = useRef<AbortController | null>(null);
   const [selectedDocs, setSelectedDocs] = useState<Record<DocType, boolean>>({
     prd: true,
     feature_list: true,
@@ -62,6 +63,9 @@ export default function WorkspacePage() {
     setGenerating(true);
     clearStream();
 
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     // Initialize steps
     setGenerationSteps(
       docTypesToGenerate.map((type) => ({
@@ -80,6 +84,7 @@ export default function WorkspacePage() {
           projectId,
           docTypes: docTypesToGenerate,
         }),
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -127,16 +132,29 @@ export default function WorkspacePage() {
       setGenerating(false);
       router.push(`/workspace/${projectId}/prd`);
     } catch (error) {
-      console.error('Error:', error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        // User cancelled — stay on current page
+      } else {
+        console.error('Error:', error);
+        alert('문서 생성 중 오류가 발생했습니다.');
+      }
       setGenerating(false);
-      alert('문서 생성 중 오류가 발생했습니다.');
     }
+  };
+
+  const handleCancel = () => {
+    abortControllerRef.current?.abort();
+    setGenerating(false);
   };
 
   if (isGenerating) {
     return (
       <AppShell>
-        <GenerationProgress steps={generationSteps} streamText={streamText} />
+        <GenerationProgress
+          steps={generationSteps}
+          streamText={streamText}
+          onCancel={handleCancel}
+        />
       </AppShell>
     );
   }

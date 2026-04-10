@@ -27,6 +27,23 @@
 
 ---
 
+## 2026-04-10 — Phase 2 완료 + Phase 3 진행 중
+
+### 완료
+- [x] **버그 수정**: `token` SSE 이벤트 → `appendStream` 미호출 (빈 문서 저장 문제)
+- [x] `feature_spec` / `api_spec` / `erd` 프롬프트 + pipeline 라우팅 추가
+- [x] `MermaidRenderer` 컴포넌트 (MarkdownViewer 내 mermaid 코드블록 자동 렌더링)
+- [x] `@tailwindcss/typography` + `mermaid` 패키지 설치
+- [x] Step 라벨 전체 docType 대응
+- [x] **AbortController**: pipeline.ts signal 전달, route.ts request.signal 연결, new/page.tsx 취소 핸들러
+
+### 진행 중 (이번 세션)
+- [x] GenerationProgress 취소 버튼 UI
+- [x] 재생성 버튼 (뷰어 SidePanel)
+- [x] 인라인 편집 모드 (뷰어)
+
+---
+
 ## 다음 작업 (우선순위 순)
 
 ### 🔴 즉시 — 로컬 실행 확인

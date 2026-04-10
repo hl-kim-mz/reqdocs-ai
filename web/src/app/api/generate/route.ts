@@ -61,7 +61,8 @@ export async function POST(request: Request) {
           docTypes,
           onStep,
           onToken,
-          onDone
+          onDone,
+          request.signal
         );
 
         // Signal completion

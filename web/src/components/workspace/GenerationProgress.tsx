@@ -1,24 +1,43 @@
 'use client';
 
-import { Loader } from 'lucide-react';
+import { Loader, X } from 'lucide-react';
 import type { GenerationStep, DocType } from '@/lib/types';
+
+const DOC_LABELS: Record<DocType, string> = {
+  prd: 'PRD',
+  feature_list: '기능 목록',
+  feature_spec: '기능 명세',
+  api_spec: 'API 명세',
+  erd: 'ERD',
+};
 
 interface GenerationProgressProps {
   steps: GenerationStep[];
   streamText: Record<DocType, string>;
+  onCancel?: () => void;
 }
 
 export default function GenerationProgress({
   steps,
   streamText,
+  onCancel,
 }: GenerationProgressProps) {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Steps */}
       <div className="bg-white rounded-lg border border-slate-200 p-8 mb-8">
-        <h3 className="text-lg font-semibold text-slate-900 mb-6">
-          문서 생성 중...
-        </h3>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-semibold text-slate-900">문서 생성 중...</h3>
+          {onCancel && (
+            <button
+              onClick={onCancel}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              <X size={15} />
+              취소
+            </button>
+          )}
+        </div>
 
         <div className="space-y-4">
           {steps.map((step) => (
@@ -38,9 +57,7 @@ export default function GenerationProgress({
                 )}
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-slate-900">
-                  {step.label}
-                </p>
+                <p className="text-sm font-medium text-slate-900">{step.label}</p>
               </div>
               <span
                 className={`text-xs px-2 py-1 rounded-full font-medium ${
@@ -66,28 +83,20 @@ export default function GenerationProgress({
         </div>
       </div>
 
-      {/* Preview */}
+      {/* Streaming preview */}
       {Object.entries(streamText).some(([, text]) => text.length > 0) && (
         <div className="bg-white rounded-lg border border-slate-200 p-8">
-          <h3 className="text-lg font-semibold text-slate-900 mb-4">
-            미리보기
-          </h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-4">미리보기</h3>
 
           <div className="space-y-6 max-h-96 overflow-y-auto">
-            {Object.entries(streamText).map(([type, text]) => {
+            {(Object.entries(streamText) as [DocType, string][]).map(([type, text]) => {
               if (!text) return null;
               return (
                 <div key={type} className="pb-6 border-b border-slate-200 last:border-b-0">
                   <p className="text-sm font-medium text-slate-700 mb-2">
-                    {type === 'prd'
-                      ? 'PRD'
-                      : type === 'feature_list'
-                        ? '기능 목록'
-                        : type}
+                    {DOC_LABELS[type]}
                   </p>
-                  <p className="text-sm text-slate-600 line-clamp-5">
-                    {text}
-                  </p>
+                  <p className="text-sm text-slate-600 line-clamp-5">{text}</p>
                 </div>
               );
             })}
