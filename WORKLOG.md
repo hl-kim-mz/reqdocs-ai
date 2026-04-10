@@ -52,47 +52,52 @@
 - [x] next.config.ts → next.config.js (Next.js 14 호환)
 - [x] 개발 포트 4000 고정
 
-### 🔴 다음 세션 즉시 — 500 에러 수정
-- 증상: /register POST 시 500 에러
-- 의심 원인: Prisma v7 런타임에서 DATABASE_URL 미인식
-- 시도한 수정: `new PrismaClient({ datasourceUrl: process.env.DATABASE_URL })` → 미해결
-- 다음 시도: 터미널 에러 로그 확인 → Prisma v7 런타임 설정 재검토
-- 참고: dev.db 파일은 `web/` 루트에 생성됨 (`file:./dev.db`)
+### ✅ 500 에러 수정 완료 (2026-04-10)
+- **원인**: Prisma v7은 `schema.prisma`에 `url` 필드 자체를 허용하지 않음. 런타임은 Driver Adapter 필수
+- **수정**: `@prisma/adapter-libsql` + `@libsql/client` 설치 → `prisma.ts` PrismaLibSql adapter 방식으로 교체, `prisma generate` 재실행
+- **검증 필요**: 서버 재시작 후 `/register` 페이지 회원가입 테스트
+
+### 전략 방향 전환 — 서비스 핵심 플로우 재설계
+- **기존**: 정리된 요구사항 입력 → 문서 생성 (기획 4단계만 커버)
+- **변경**: 비정형 입력 → AI 요구사항 구조화 → 기획자 검토 → 문서 생성 (2+4단계 통합)
+- **근거**: 기획팀 실무에서 가장 고마찰 구간은 "비정형 → 정형" 변환. 이 구간을 자동화해야 실질적인 개발 프로세스 자동화가 된다.
+- 영향 문서: `01_service-overview.md`, `02_workflow.md`, `04_screen-design.md` 전면 수정 완료
 
 ---
 
 ## 다음 작업 (우선순위 순)
 
-### 🔴 즉시 — 로컬 실행 확인
-```bash
-cd reqdocs-ai/web
-npm install
-cp .env.local.example .env.local   # ANTHROPIC_API_KEY 입력
-npm run dev                         # http://localhost:3000
-```
-- [ ] 랜딩 → 입력 → 생성 → 결과 E2E 흐름 수동 확인
-- [x] 스트리밍 이벤트 파싱 정상 동작 확인 (token 이벤트 → appendStream 버그 수정)
-- [ ] 생성된 문서 내용 품질 검토 (프롬프트 튜닝 필요 여부 판단)
+### 🔴 Phase A — 요구사항 구조화 엔진 (핵심 플로우 신설, 최우선)
 
-### 🟡 Phase 2 — 나머지 3종 문서 추가
-- [x] 기능 명세서 프롬프트 + 생성 로직 (`feature_spec`)
-- [x] API 문서 프롬프트 + OpenAPI 형식 출력 (`api_spec`)
-- [x] ERD 프롬프트 + Mermaid 출력 (`erd`)
-- [x] MermaidRenderer 컴포넌트 구현 (mermaid.js, MarkdownViewer 내 mermaid 코드블록 자동 감지)
+> 서비스의 메인 플로우를 "비정형 입력 → AI 구조화 → 기획자 검토 → 문서 생성"으로 재설계.
+> 기존 문서 생성 파이프라인은 구조화 결과를 받아 동작하도록 리팩터링.
 
-### 🟡 Phase 3 — UX 고도화
-- [ ] 파일 업로드 (PDF/DOCX → 텍스트 추출)
-- [ ] 생성 취소 기능 (AbortController)
-- [ ] 문서 인라인 편집 모드
-- [ ] 재생성 버튼 (개별 문서)
+- [ ] `structureRequirements()` 구현 — 비정형 텍스트 → `StructuredRequirement[]` JSON
+  - 카테고리 분류: 기능 요구사항 / 비기능 요구사항 / 제약사항
+  - 각 항목: `{ id, category, title, description, priority: MoSCoW, source }`
+- [ ] `StructuredRequirement` 타입 정의 (`lib/types.ts`)
+- [ ] `/api/structure` 엔드포인트 신설 (SSE 스트리밍)
+- [ ] DB 스키마: `structured_requirements` 테이블 추가
+- [ ] **S-04.5 화면 구현**: 요구사항 구조화 검토 (`/workspace/[id]/structure`)
+  - 좌측 패널: 원본 입력 (읽기 전용, 접을 수 있음)
+  - 메인: 카테고리별 요구사항 카드 목록
+  - 인터랙션: MoSCoW 태그 변경 / 항목 추가·삭제 / 설명 인라인 편집
+  - 하단 액션: [재분석] [문서 생성 →]
+- [ ] 기존 문서 생성 파이프라인 리팩터링 — `rawInput` 대신 `structuredRequirements` 기반으로 생성
 
-### 🟢 Phase 4 — 저장 + 인증
-- [ ] PostgreSQL + Prisma 셋업 (Railway)
-- [ ] NextAuth.js 로그인 (Google OAuth)
+### 🟡 Phase B — 입력 확장 (파일 업로드)
+- [ ] 파일 업로드 (`/api/upload`): `.txt` `.md` `.pdf` `.docx` 지원
+  - pdf-parse (PDF), mammoth (DOCX) 텍스트 추출
+  - 추출 결과 → textarea 자동 삽입
+- [ ] 드래그앤드롭 FileDropzone 컴포넌트
+
+### 🟡 Phase C — 저장 + 인증 고도화
+- [ ] PostgreSQL + Prisma 셋업 (Railway) — SQLite → PostgreSQL 마이그레이션
+- [ ] NextAuth.js Google OAuth 추가
 - [ ] 프로젝트 저장 / 목록 / 이력 관리
 - [ ] PDF / DOCX 내보내기
 
-### 🔵 Phase 5 — 배포
+### 🔵 Phase D — 배포
 - [ ] Vercel 배포 + 환경변수 설정
 - [ ] 도메인 연결
 - [ ] Sentry 에러 모니터링 연동
