@@ -10,3 +10,18 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 .vscode/
+
+/generated/prisma
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Build cache
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# Claude / OMC internals
+.claude/
+.omc/

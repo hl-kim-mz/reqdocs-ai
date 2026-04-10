@@ -32,7 +32,8 @@ export async function POST(request: Request) {
     });
 
     return Response.json({ id: user.id, email: user.email }, { status: 201 });
-  } catch {
+  } catch (err) {
+    console.error('[register]', err);
     return Response.json({ error: '서버 오류가 발생했습니다.' }, { status: 500 });
   }
 }

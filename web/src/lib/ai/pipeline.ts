@@ -1,10 +1,8 @@
-import Anthropic from '@anthropic-ai/sdk';
+import Groq from 'groq-sdk';
 import { getPRDPrompt, getFeatureListPrompt, getFeatureSpecPrompt, getAPISpecPrompt, getERDPrompt } from './prompts';
 import type { DocType } from '../types';
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export async function generateDocuments(
   rawInput: string,
@@ -16,33 +14,31 @@ export async function generateDocuments(
 ) {
   const results: Record<DocType, string> = {} as Record<DocType, string>;
 
+  const promptMap: Record<DocType, () => string> = {
+    prd: () => getPRDPrompt(rawInput),
+    feature_list: () => getFeatureListPrompt(rawInput),
+    feature_spec: () => getFeatureSpecPrompt(rawInput),
+    api_spec: () => getAPISpecPrompt(rawInput),
+    erd: () => getERDPrompt(rawInput),
+  };
+
   for (const docType of docTypes) {
+    if (signal?.aborted) break;
     onStep(docType, 'active');
 
     try {
-      const promptMap: Record<DocType, () => string> = {
-        prd: () => getPRDPrompt(rawInput),
-        feature_list: () => getFeatureListPrompt(rawInput),
-        feature_spec: () => getFeatureSpecPrompt(rawInput),
-        api_spec: () => getAPISpecPrompt(rawInput),
-        erd: () => getERDPrompt(rawInput),
-      };
-      const prompt = promptMap[docType]();
-
       let fullContent = '';
 
-      const stream = await client.messages.stream({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 4096,
-        messages: [{ role: 'user', content: prompt }],
-      }, { signal });
+      const stream = await groq.chat.completions.create({
+        model: 'llama-3.1-8b-instant',
+        messages: [{ role: 'user', content: promptMap[docType]() }],
+        stream: true,
+      });
 
-      for await (const event of stream) {
-        if (
-          event.type === 'content_block_delta' &&
-          event.delta.type === 'text_delta'
-        ) {
-          const token = event.delta.text;
+      for await (const chunk of stream) {
+        if (signal?.aborted) break;
+        const token = chunk.choices[0]?.delta?.content ?? '';
+        if (token) {
           fullContent += token;
           onToken(docType, token);
         }

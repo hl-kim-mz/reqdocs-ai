@@ -1,7 +1,15 @@
 'use client';
 
 import { create } from 'zustand';
-import type { Project, GenerationStep, DocType, Document } from '@/lib/types';
+import type {
+  Project,
+  GenerationStep,
+  DocType,
+  Document,
+  StructuredRequirement,
+  MoSCoWPriority,
+  RequirementCategory,
+} from '@/lib/types';
 
 interface ProjectStore {
   projects: Project[];
@@ -10,19 +18,33 @@ interface ProjectStore {
   generationSteps: GenerationStep[];
   streamText: Record<DocType, string>;
 
+  // Structure state
+  currentDbProjectId: string | null;
+  currentRawInput: string;
+  structuredRequirements: StructuredRequirement[];
+  isStructuring: boolean;
+  structureProgress: string;
+
   createProject: (title: string, rawInput: string) => string;
   setCurrentProject: (projectId: string | null) => void;
-  updateDocument: (
-    projectId: string,
-    docType: DocType,
-    content: string
-  ) => void;
+  updateDocument: (projectId: string, docType: DocType, content: string) => void;
   setGenerating: (isGenerating: boolean) => void;
   setGenerationSteps: (steps: GenerationStep[]) => void;
   updateStep: (stepId: string, status: GenerationStep['status']) => void;
   appendStream: (docType: DocType, token: string) => void;
   clearStream: () => void;
   getProject: (projectId: string) => Project | undefined;
+
+  // Structure actions
+  setCurrentDbProjectId: (id: string | null) => void;
+  setCurrentRawInput: (input: string) => void;
+  setStructuredRequirements: (requirements: StructuredRequirement[]) => void;
+  updateRequirement: (id: string, updates: Partial<Omit<StructuredRequirement, 'id' | 'order'>>) => void;
+  addRequirement: (category: RequirementCategory) => void;
+  removeRequirement: (id: string) => void;
+  setStructuring: (v: boolean) => void;
+  appendStructureToken: (token: string) => void;
+  clearStructureProgress: () => void;
 }
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
@@ -37,6 +59,13 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     api_spec: '',
     erd: '',
   },
+
+  // Structure state
+  currentDbProjectId: null,
+  currentRawInput: '',
+  structuredRequirements: [],
+  isStructuring: false,
+  structureProgress: '',
 
   createProject: (title: string, rawInput: string) => {
     const projectId = Date.now().toString();
@@ -146,4 +175,47 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   getProject: (projectId: string) => {
     return get().projects.find((p) => p.id === projectId);
   },
+
+  // Structure actions
+  setCurrentDbProjectId: (id) => set({ currentDbProjectId: id }),
+  setCurrentRawInput: (input) => set({ currentRawInput: input }),
+  setStructuredRequirements: (requirements) => set({ structuredRequirements: requirements }),
+
+  updateRequirement: (id, updates) => {
+    set((state) => ({
+      structuredRequirements: state.structuredRequirements.map((r) =>
+        r.id === id ? { ...r, ...updates } : r
+      ),
+    }));
+  },
+
+  addRequirement: (category) => {
+    const state = get();
+    const inCategory = state.structuredRequirements.filter((r) => r.category === category);
+    const maxOrder = state.structuredRequirements.reduce((m, r) => Math.max(m, r.order), -1);
+    const nextNum = state.structuredRequirements.length + 1;
+    const newReq: StructuredRequirement = {
+      id: `REQ-${String(nextNum).padStart(3, '0')}`,
+      category,
+      title: '',
+      description: '',
+      priority: 'Should Have' as MoSCoWPriority,
+      order: maxOrder + 1,
+    };
+    void inCategory; // suppress unused warning
+    set((state) => ({
+      structuredRequirements: [...state.structuredRequirements, newReq],
+    }));
+  },
+
+  removeRequirement: (id) => {
+    set((state) => ({
+      structuredRequirements: state.structuredRequirements.filter((r) => r.id !== id),
+    }));
+  },
+
+  setStructuring: (v) => set({ isStructuring: v }),
+  appendStructureToken: (token) =>
+    set((state) => ({ structureProgress: state.structureProgress + token })),
+  clearStructureProgress: () => set({ structureProgress: '' }),
 }));

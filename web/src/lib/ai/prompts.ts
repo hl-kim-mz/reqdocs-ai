@@ -1,3 +1,35 @@
+export function getStructurePrompt(rawInput: string): string {
+  return `당신은 서비스 기획 전문가입니다. 다음 비정형 입력(회의록, 이메일, 기획 메모 등)을 분석하여 구조화된 요구사항 목록을 JSON 형식으로 출력하세요.
+
+입력:
+${rawInput}
+
+다음 JSON 형식으로만 출력하세요. JSON 외의 텍스트는 절대 포함하지 마세요:
+
+{
+  "domain": "서비스 도메인 (예: 이커머스, 사내 CRM)",
+  "purpose": "서비스 목적 한 줄 요약",
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "category": "기능 요구사항",
+      "title": "요구사항 제목 (간결하게, 20자 이내)",
+      "description": "구체적인 설명 (조건, 예외 포함, 100자 이내)",
+      "priority": "Must Have",
+      "source": "원문에서 근거 문장 (없으면 null)"
+    }
+  ]
+}
+
+규칙:
+- category는 반드시 '기능 요구사항', '비기능 요구사항', '제약사항' 중 하나
+- priority는 반드시 'Must Have', 'Should Have', 'Could Have', "Won't Have" 중 하나
+- id는 REQ-001 형식으로 순번 부여
+- 최소 5개 이상, 최대 30개 이하로 요구사항 추출
+- 원문에 언급된 내용만 추출 (임의 추가 금지)
+- 기능 요구사항 우선 추출, 비기능/제약은 명시적 언급 시에만 포함`;
+}
+
 export function getPRDPrompt(rawInput: string): string {
   return `당신은 제품 기획 전문가입니다. 다음 요구사항을 바탕으로 상세한 제품 요구사항 문서(PRD)를 작성하세요.
 
