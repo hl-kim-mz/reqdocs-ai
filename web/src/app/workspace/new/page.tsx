@@ -2,97 +2,62 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { Loader } from 'lucide-react';
 import { useProjectStore } from '@/store/useProjectStore';
 import AppShell from '@/components/layout/AppShell';
 import RequirementsEditor from '@/components/workspace/RequirementsEditor';
-import DocumentSelector from '@/components/workspace/DocumentSelector';
-import GenerationProgress from '@/components/workspace/GenerationProgress';
-import type { DocType } from '@/lib/types';
+import AudioUpload from '@/components/workspace/AudioUpload';
+import FileUpload from '@/components/workspace/FileUpload';
+import { parseSSEChunk, type SSEBuffer } from '@/lib/parseSSE';
+import type { StructuredRequirement } from '@/lib/types';
 
 export default function WorkspacePage() {
   const router = useRouter();
   const [title, setTitle] = useState('새 프로젝트');
   const [input, setInput] = useState('');
   const abortControllerRef = useRef<AbortController | null>(null);
-  const [selectedDocs, setSelectedDocs] = useState<Record<DocType, boolean>>({
-    prd: true,
-    feature_list: true,
-    feature_spec: false,
-    api_spec: false,
-    erd: false,
-  });
 
   const {
-    createProject,
-    setGenerating,
-    isGenerating,
-    generationSteps,
-    streamText,
-    setGenerationSteps,
-    updateDocument,
-    appendStream,
-    clearStream,
+    setCurrentDbProjectId,
+    setCurrentRawInput,
+    setStructuredRequirements,
+    isStructuring,
+    setStructuring,
+    structureProgress,
+    appendStructureToken,
+    clearStructureProgress,
   } = useProjectStore();
 
-  const STEP_LABELS: Record<DocType, string> = {
-    prd: 'PRD 생성',
-    feature_list: '기능 목록 생성',
-    feature_spec: '기능 명세 생성',
-    api_spec: 'API 명세 생성',
-    erd: 'ERD 생성',
-  };
-
-  const handleGenerate = async () => {
+  const handleStructure = async () => {
     if (!input.trim()) {
       alert('요구사항을 입력해주세요.');
       return;
     }
 
-    const docTypesToGenerate = (
-      Object.entries(selectedDocs)
-        .filter(([, isSelected]) => isSelected)
-        .map(([type]) => type) as DocType[]
-    );
-
-    if (docTypesToGenerate.length === 0) {
-      alert('생성할 문서를 선택해주세요.');
-      return;
-    }
-
-    const projectId = createProject(title, input);
-    setGenerating(true);
-    clearStream();
+    setStructuring(true);
+    clearStructureProgress();
+    setCurrentRawInput(input);
 
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
-    // Initialize steps
-    setGenerationSteps(
-      docTypesToGenerate.map((type) => ({
-        id: type,
-        label: STEP_LABELS[type],
-        status: 'pending' as const,
-      }))
-    );
-
     try {
-      const response = await fetch('/api/generate', {
+      const response = await fetch('/api/structure', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          rawInput: input,
-          projectId,
-          docTypes: docTypesToGenerate,
-        }),
+        body: JSON.stringify({ rawInput: input, title }),
         signal: controller.signal,
       });
 
       if (!response.ok) {
-        throw new Error('Generation failed');
+        const errText = await response.text().catch(() => '');
+        throw new Error(`[${response.status}] ${errText || '구조화 요청 실패'}`);
       }
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
+      const sseBuffer: SSEBuffer = { text: '' };
+      let projectId = '';
 
       if (reader) {
         while (true) {
@@ -100,61 +65,69 @@ export default function WorkspacePage() {
           if (done) break;
 
           const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n');
+          const events = parseSSEChunk(chunk, sseBuffer);
 
-          for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-
-            if (line.startsWith('event: ')) {
-              const eventType = line.slice(7);
-              const dataLine = lines[i + 1];
-
-              if (dataLine?.startsWith('data: ')) {
-                const data = JSON.parse(dataLine.slice(6));
-
-                if (eventType === 'step') {
-                  // Handle step updates (managed server-side)
-                } else if (eventType === 'token' && 'type' in data && 'token' in data) {
-                  appendStream(data.type as DocType, data.token as string);
-                } else if (eventType === 'done' && 'type' in data) {
-                  // Finalize document
-                  const docType = data.type as DocType;
-                  const content = useProjectStore.getState().streamText[docType];
-                  updateDocument(projectId, docType, content);
-                }
-              }
+          for (const { event, data } of events) {
+            if (event === 'start' && typeof data.projectId === 'string') {
+              projectId = data.projectId;
+              setCurrentDbProjectId(projectId);
+            } else if (event === 'token' && typeof data.token === 'string') {
+              appendStructureToken(data.token);
+            } else if (event === 'done') {
+              const reqs = data.requirements as StructuredRequirement[];
+              setStructuredRequirements(reqs);
+            } else if (event === 'error' && typeof data.message === 'string') {
+              throw new Error(data.message);
             }
           }
         }
       }
 
-      // Redirect to result page
-      setGenerating(false);
-      router.push(`/workspace/${projectId}/prd`);
+      setStructuring(false);
+      if (projectId) {
+        router.push(`/workspace/${projectId}/structure`);
+      }
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
-        // User cancelled — stay on current page
+        // cancelled
       } else {
-        console.error('Error:', error);
-        alert('문서 생성 중 오류가 발생했습니다.');
+        console.error('[structure]', error);
+        alert(error instanceof Error ? error.message : '오류가 발생했습니다.');
       }
-      setGenerating(false);
+      setStructuring(false);
     }
   };
 
   const handleCancel = () => {
     abortControllerRef.current?.abort();
-    setGenerating(false);
+    setStructuring(false);
   };
 
-  if (isGenerating) {
+  if (isStructuring) {
     return (
       <AppShell>
-        <GenerationProgress
-          steps={generationSteps}
-          streamText={streamText}
-          onCancel={handleCancel}
-        />
+        <div className="max-w-2xl mx-auto mt-20 text-center">
+          <div className="bg-white rounded-xl border border-slate-200 p-12">
+            <Loader className="w-10 h-10 text-indigo-600 animate-spin mx-auto mb-6" />
+            <h3 className="text-xl font-semibold text-slate-900 mb-2">
+              요구사항 분석 중...
+            </h3>
+            <p className="text-slate-500 text-sm mb-6">
+              AI가 입력 내용을 분석하여 요구사항을 구조화하고 있습니다.
+            </p>
+            {structureProgress && (
+              <div className="text-left bg-slate-50 rounded-lg p-4 max-h-48 overflow-hidden text-xs text-slate-400 font-mono">
+                {structureProgress.slice(-500)}
+              </div>
+            )}
+            <button
+              onClick={handleCancel}
+              className="mt-6 px-4 py-2 text-sm text-slate-600 hover:text-red-600 border border-slate-300 rounded-lg transition-colors"
+            >
+              취소
+            </button>
+          </div>
+        </div>
       </AppShell>
     );
   }
@@ -177,21 +150,46 @@ export default function WorkspacePage() {
             />
           </div>
           <RequirementsEditor value={input} onChange={setInput} />
+          <AudioUpload
+            onTranscribed={(text) =>
+              setInput((prev) => prev ? `${prev}\n\n${text}` : text)
+            }
+          />
+          <FileUpload
+            onExtracted={(text) =>
+              setInput((prev) => prev ? `${prev}\n\n${text}` : text)
+            }
+          />
         </div>
 
-        {/* Right: Document Selector */}
-        <div className="w-80 flex flex-col gap-6">
-          <DocumentSelector
-            selectedDocs={selectedDocs}
-            onSelectionChange={setSelectedDocs}
-          />
+        {/* Right: Action Panel */}
+        <div className="w-72 flex flex-col gap-4">
+          <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+            <h3 className="font-semibold text-slate-800 mb-2">입력 가이드</h3>
+            <ul className="text-sm text-slate-600 space-y-1.5">
+              <li>• 회의록, 이메일, 기획 메모 등 자유롭게 붙여넣기</li>
+              <li>• 정리되지 않아도 됩니다</li>
+              <li>• AI가 요구사항을 자동 분류합니다</li>
+              <li>• 검토 후 문서 생성을 선택합니다</li>
+            </ul>
+          </div>
+
+          <div className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+            <h3 className="font-semibold text-slate-800 mb-2">생성 흐름</h3>
+            <ol className="text-sm text-slate-600 space-y-1.5 list-decimal list-inside">
+              <li>비정형 입력</li>
+              <li className="text-indigo-600 font-medium">AI 요구사항 구조화</li>
+              <li>기획자 검토 · 편집</li>
+              <li>개발 문서 자동 생성</li>
+            </ol>
+          </div>
 
           <button
-            onClick={handleGenerate}
+            onClick={handleStructure}
             disabled={!input.trim()}
             className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:bg-slate-300 transition-colors"
           >
-            문서 생성
+            ⚡ 요구사항 구조화 시작
           </button>
         </div>
       </div>

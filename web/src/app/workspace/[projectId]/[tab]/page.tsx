@@ -7,6 +7,7 @@ import AppShell from '@/components/layout/AppShell';
 import DocumentTabBar from '@/components/viewer/DocumentTabBar';
 import MarkdownViewer from '@/components/viewer/MarkdownViewer';
 import SidePanel from '@/components/viewer/SidePanel';
+import { parseSSEChunk, type SSEBuffer } from '@/lib/parseSSE';
 import type { DocType } from '@/lib/types';
 
 export default function WorkspaceViewerPage() {
@@ -82,6 +83,7 @@ export default function WorkspaceViewerPage() {
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
+      const sseBuffer: SSEBuffer = { text: '' };
 
       if (reader) {
         while (true) {
@@ -89,22 +91,14 @@ export default function WorkspaceViewerPage() {
           if (done) break;
 
           const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n');
+          const events = parseSSEChunk(chunk, sseBuffer);
 
-          for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            if (line.startsWith('event: ')) {
-              const eventType = line.slice(7);
-              const dataLine = lines[i + 1];
-              if (dataLine?.startsWith('data: ')) {
-                const data = JSON.parse(dataLine.slice(6));
-                if (eventType === 'token' && 'token' in data) {
-                  buffer += data.token as string;
-                } else if (eventType === 'done') {
-                  updateDocument(projectId, tab, buffer);
-                  buffer = '';
-                }
-              }
+          for (const { event, data } of events) {
+            if (event === 'token' && typeof data.token === 'string') {
+              buffer += data.token;
+            } else if (event === 'done') {
+              updateDocument(projectId, tab, buffer);
+              buffer = '';
             }
           }
         }
