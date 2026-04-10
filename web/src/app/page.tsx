@@ -29,7 +29,7 @@ export default function Home() {
           </p>
 
           <button
-            onClick={() => router.push('/workspace/new')}
+            onClick={() => router.push('/register')}
             className="inline-flex items-center gap-2 bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
           >
             시작하기
