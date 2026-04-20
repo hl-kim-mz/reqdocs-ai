@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="dark"><head><meta charset="utf-8"><title>Dark — Req Card</title>
+<link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+  html,body{margin:0;padding:0;background:var(--color-surface-sub);}
+  .wrap{padding:22px 24px;font-family:var(--font-sans);display:flex;flex-direction:column;gap:10px;}
+  .req{background:var(--color-surface);border:1px solid var(--color-border);border-radius:8px;padding:14px 16px;}
+  .req-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+  .req-meta{display:flex;gap:10px;align-items:center;}
+  .req-id{font-family:var(--font-mono);font-size:11px;color:var(--color-text-sub);}
+  .chip{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;border:1px solid;font-size:11px;font-weight:500;}
+  .chip-must{background:var(--moscow-must-bg);color:var(--moscow-must-ink);border-color:var(--moscow-must-border);}
+  .chip-should{background:var(--moscow-should-bg);color:var(--moscow-should-ink);border-color:var(--moscow-should-border);}
+  .req-title{font-size:14px;font-weight:500;color:var(--color-text);margin-bottom:3px;}
+  .req-desc{font-size:12px;color:var(--color-text-sub);line-height:1.55;}
+  .req-src{font-size:11px;color:var(--color-text-muted);font-style:italic;border-left:2px solid var(--color-border-hover);padding-left:8px;margin-top:8px;}
+  .icon-btns{display:flex;gap:2px;}
+  .ibtn{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:6px;cursor:pointer;color:var(--color-text-muted);}
+  .ibtn:hover{background:var(--color-surface-muted);color:var(--color-text-body);}
+</style></head><body><div class="wrap">
+  <div class="req">
+    <div class="req-head">
+      <div class="req-meta">
+        <span class="req-id">REQ-001</span>
+        <span class="chip chip-must">Must Have ▾</span>
+      </div>
+      <div class="icon-btns">
+        <button class="ibtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.17 6.8a1 1 0 0 0-3.99-3.99L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.36-1.32a2 2 0 0 0 .83-.5z"/><path d="m15 5 4 4"/></svg></button>
+        <button class="ibtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+      </div>
+    </div>
+    <div class="req-title">사용자 로그인</div>
+    <div class="req-desc">이메일/비밀번호 로그인, 소셜 로그인(Google) 지원</div>
+    <div class="req-src">출처: "인증은 필수로 들어가야 한다"</div>
+  </div>
+  <div class="req">
+    <div class="req-head">
+      <div class="req-meta">
+        <span class="req-id">REQ-003</span>
+        <span class="chip chip-should">Should Have ▾</span>
+      </div>
+    </div>
+    <div class="req-title">장바구니</div>
+    <div class="req-desc">세션 기반 장바구니 유지, 로그아웃 시에도 30일 보존</div>
+  </div>
+</div></body></html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+body{margin:0;background:#fff;font-family:var(--font-sans);padding:22px 26px;}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+.c{display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
+.r{background:var(--brand-primary);width:100%;}
+.n{font-size:11px;font-weight:600;color:var(--color-text);}
+.v{font-family:var(--font-mono);font-size:10px;color:var(--color-text-sub);}
+.r0{height:28px;border-radius:0;}
+.r1{height:28px;border-radius:4px;}
+.r2{height:28px;border-radius:6px;}
+.r3{height:28px;border-radius:8px;}
+.r4{height:28px;border-radius:12px;}
+.r5{height:28px;border-radius:999px;}
+</style></head><body>
+<div class="grid">
+  <div class="c"><div class="r r0"></div><div class="n">none</div><div class="v">0</div></div>
+  <div class="c"><div class="r r1"></div><div class="n">xs</div><div class="v">4px · pills</div></div>
+  <div class="c"><div class="r r2"></div><div class="n">sm</div><div class="v">6px</div></div>
+  <div class="c"><div class="r r3"></div><div class="n">md (default)</div><div class="v">8px · rounded-lg</div></div>
+  <div class="c"><div class="r r4"></div><div class="n">lg</div><div class="v">12px · rounded-xl</div></div>
+  <div class="c"><div class="r r5"></div><div class="n">full</div><div class="v">pill / avatar</div></div>
+</div>
+</body></html>

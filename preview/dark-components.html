@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" class="dark"><head><meta charset="utf-8"><title>Dark — Components</title>
+<link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+  html,body{margin:0;padding:0;background:var(--color-surface-sub);}
+  .card{padding:22px 24px;font-family:var(--font-sans);color:var(--color-text-body);}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;}
+  .row:last-child{margin-bottom:0;}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-weight:600;font-size:13px;border:1px solid transparent;cursor:pointer;font-family:inherit;}
+  .btn-primary{background:var(--brand-primary);color:#fff;}
+  .btn-secondary{background:var(--color-surface-muted);color:var(--color-text-body);}
+  .btn-ghost{background:transparent;color:var(--color-text-body);border:1px solid var(--color-border-hover);}
+  .btn-tinted{background:var(--brand-primary-50);color:var(--brand-primary-ink);border:1px solid var(--brand-primary-100);}
+  .input{padding:10px 14px;border:1px solid var(--color-border-hover);border-radius:8px;background:var(--color-surface);color:var(--color-text);font-size:13px;font-family:inherit;width:200px;outline:none;}
+  .input:focus{border-color:var(--brand-primary);box-shadow:0 0 0 1px var(--brand-primary);}
+  .chip{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;border:1px solid;font-size:11px;font-weight:500;}
+  .chip-must{background:var(--moscow-must-bg);color:var(--moscow-must-ink);border-color:var(--moscow-must-border);}
+  .chip-should{background:var(--moscow-should-bg);color:var(--moscow-should-ink);border-color:var(--moscow-should-border);}
+  .chip-could{background:var(--moscow-could-bg);color:var(--moscow-could-ink);border-color:var(--moscow-could-border);}
+  .chip-wont{background:var(--moscow-wont-bg);color:var(--moscow-wont-ink);border-color:var(--moscow-wont-border);}
+  .eyebrow{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-sub);min-width:74px;}
+</style></head><body><div class="card">
+  <div class="row">
+    <span class="eyebrow">Buttons</span>
+    <button class="btn btn-primary">Primary</button>
+    <button class="btn btn-secondary">Secondary</button>
+    <button class="btn btn-ghost">Ghost</button>
+    <button class="btn btn-tinted">Tinted</button>
+  </div>
+  <div class="row">
+    <span class="eyebrow">Inputs</span>
+    <input class="input" placeholder="Project name"/>
+    <input class="input" value="쇼핑몰 리뉴얼" style="width:160px;"/>
+  </div>
+  <div class="row">
+    <span class="eyebrow">MoSCoW</span>
+    <span class="chip chip-must">Must Have</span>
+    <span class="chip chip-should">Should Have</span>
+    <span class="chip chip-could">Could Have</span>
+    <span class="chip chip-wont">Won't Have</span>
+  </div>
+</div></body></html>

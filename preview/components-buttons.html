@@ -1,0 +1,30 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+body{margin:0;background:#fff;font-family:var(--font-sans);padding:22px 26px;color:var(--color-text-body);}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;}
+.lbl{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-sub);font-weight:600;width:90px;flex-shrink:0;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer;transition:background 150ms,color 150ms;font-family:inherit;}
+.primary{background:#4F46E5;color:#fff;} .primary:hover{background:#4338CA;}
+.primary-lg{padding:12px 24px;font-size:14px;}
+.secondary{background:#F1F5F9;color:#334155;} .secondary:hover{background:#E2E8F0;}
+.ghost{background:transparent;color:#475569;border:1px solid #CBD5E1;} .ghost:hover{background:#F8FAFC;}
+.tinted{background:#EEF2FF;color:#4F46E5;} .tinted:hover{background:#E0E7FF;}
+.danger{background:#F1F5F9;color:#334155;} .danger:hover{background:#FEF2F2;color:#B91C1C;}
+.ico{width:16px;height:16px;display:inline-block;}
+.disabled{background:#CBD5E1 !important;color:#fff !important;cursor:not-allowed;}
+</style></head><body>
+<div class="row"><span class="lbl">Primary</span>
+  <button class="btn primary">시작하기 →</button>
+  <button class="btn primary">⚡ 문서 생성</button>
+  <button class="btn primary disabled">문서 생성 →</button>
+</div>
+<div class="row"><span class="lbl">Secondary</span>
+  <button class="btn secondary">편집</button>
+  <button class="btn ghost">원본 보기 ▾</button>
+  <button class="btn tinted">마크다운 복사</button>
+</div>
+<div class="row"><span class="lbl">Destructive</span>
+  <button class="btn danger">로그아웃</button>
+  <button class="btn danger">취소</button>
+</div>
+</body></html>

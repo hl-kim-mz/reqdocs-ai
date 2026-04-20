@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark"><head><meta charset="utf-8"><title>Dark — Viewer</title>
+<link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:var(--color-surface-sub);color:var(--color-text-body);font-family:var(--font-sans);}
+  .app{display:flex;flex-direction:column;height:100vh;}
+  .topbar{height:56px;background:var(--color-surface);border-bottom:1px solid var(--color-border);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;}
+  .brand{font-size:17px;font-weight:700;color:var(--brand-primary);}
+  .brand em{color:var(--color-text-sub);font-style:normal;font-weight:500;margin-left:2px;}
+  .spacer{flex:1;}
+  .user{font-size:13px;color:var(--color-text-sub);}
+  .main{flex:1;display:flex;overflow:hidden;}
+  .side{width:200px;background:var(--color-surface);border-right:1px solid var(--color-border);padding:14px;flex-shrink:0;}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--color-text-body);cursor:pointer;}
+  .nav-item.active{background:var(--brand-primary-50);color:var(--brand-primary-ink);font-weight:600;}
+  .nav-sub{display:flex;align-items:center;gap:8px;padding:6px 12px;font-size:12px;color:var(--color-text-sub);cursor:pointer;}
+  .nav-sub:hover{color:var(--color-text-body);}
+  .eyebrow{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-muted);padding:12px 12px 4px;}
+  .content{flex:1;padding:22px 28px;overflow:auto;display:flex;flex-direction:column;}
+  .h1row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .h1{font-size:18px;font-weight:600;color:var(--color-text);}
+  .tabs{display:flex;gap:6px;border-bottom:1px solid var(--color-border);margin-bottom:16px;}
+  .tab{padding:9px 14px;font-size:13px;color:var(--color-text-sub);border-bottom:2px solid transparent;cursor:pointer;}
+  .tab.active{color:var(--brand-primary);border-bottom-color:var(--brand-primary);font-weight:600;}
+  .row{display:flex;gap:16px;flex:1;min-height:0;}
+  .doc{flex:1;background:var(--color-surface);border:1px solid var(--color-border);border-radius:8px;padding:22px 26px;overflow:auto;}
+  .doc h1{font-size:24px;font-weight:700;color:var(--color-text);margin:4px 0 10px;}
+  .doc h2{font-size:17px;font-weight:600;color:var(--color-text);margin:18px 0 8px;border-bottom:1px solid var(--color-border);padding-bottom:5px;}
+  .doc p{font-size:13px;color:var(--color-text-body);line-height:1.65;margin:6px 0;}
+  .doc li{font-size:13px;color:var(--color-text-body);margin:3px 0 3px 18px;}
+  code{background:var(--color-surface-muted);color:#F472B6;padding:.15em .35em;border-radius:4px;font-family:var(--font-mono);font-size:12px;}
+  .panel{width:220px;flex-shrink:0;background:var(--color-surface);border:1px solid var(--color-border);border-radius:8px;padding:16px;}
+  .panel-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-sub);margin-bottom:6px;}
+  .panel-k{font-size:11px;color:var(--color-text-sub);margin-bottom:2px;margin-top:8px;}
+  .panel-v{font-size:13px;font-weight:600;color:var(--color-text);}
+  .panel hr{border:0;border-top:1px solid var(--color-border);margin:12px 0;}
+  .btn{display:flex;align-items:center;gap:6px;justify-content:center;padding:7px 12px;border-radius:6px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;border:1px solid transparent;margin-bottom:6px;width:100%;}
+  .btn-sec{background:var(--color-surface-muted);color:var(--color-text-body);}
+  .btn-tint{background:var(--brand-primary-50);color:var(--brand-primary-ink);border:1px solid var(--brand-primary-100);}
+</style></head><body><div class="app">
+  <div class="topbar">
+    <div class="brand">ReqDocs<em>AI</em></div>
+    <div class="spacer"></div>
+    <span class="user">기획자</span>
+  </div>
+  <div class="main">
+    <div class="side">
+      <div class="nav-item">＋ 새 프로젝트</div>
+      <div class="eyebrow">최근 프로젝트</div>
+      <div class="nav-sub">▸ 쇼핑몰 리뉴얼 v2</div>
+      <div class="nav-sub">▸ CRM 시스템</div>
+      <div class="nav-sub">▸ 배송 추적 앱</div>
+    </div>
+    <div class="content">
+      <div class="h1row">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>
+        <span class="h1">쇼핑몰 리뉴얼 v2</span>
+      </div>
+      <div class="tabs">
+        <div class="tab active">PRD</div>
+        <div class="tab">기능 목록</div>
+        <div class="tab">API 문서</div>
+        <div class="tab">ERD</div>
+      </div>
+      <div class="row">
+        <div class="doc">
+          <h1>PRD — 쇼핑몰 리뉴얼 v2</h1>
+          <h2>제품 개요</h2>
+          <p>본 서비스는 온라인 쇼핑몰 사용자가 상품을 탐색하고 구매하는 플랫폼으로, 기존 대비 전환율과 모바일 UX를 개선합니다.</p>
+          <h2>목표</h2>
+          <ul><li>전환율 20% 향상</li><li>이탈률 15% 감소</li><li>모바일 UX 개선</li></ul>
+          <h2>사용자 시나리오</h2>
+          <p>일반 구매자는 <code>/login</code> 경로로 접속 후 상품을 검색하고 장바구니에 담아 결제를 진행합니다.</p>
+        </div>
+        <div class="panel">
+          <div class="panel-lbl">문서 정보</div>
+          <div class="panel-k">문서 타입</div><div class="panel-v">PRD</div>
+          <div class="panel-k">생성 시간</div><div class="panel-v">2026-04-20 14:32</div>
+          <hr/>
+          <button class="btn btn-sec">✎ 편집</button>
+          <button class="btn btn-sec">↻ 재생성</button>
+          <button class="btn btn-tint">⧉ 마크다운 복사</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></body></html>

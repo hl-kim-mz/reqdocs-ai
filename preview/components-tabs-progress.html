@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+body{margin:0;background:#fff;font-family:var(--font-sans);padding:0;color:#0F172A;}
+.tabs{display:flex;gap:8px;border-bottom:1px solid #E2E8F0;padding:0 24px;}
+.tab{padding:14px 16px;border-bottom:2px solid transparent;color:#64748B;font-size:14px;cursor:pointer;transition:all 150ms;}
+.tab.active{border-bottom-color:#4F46E5;color:#4F46E5;font-weight:600;}
+.tab:hover:not(.active){color:#0F172A;}
+.tab.disabled{color:#CBD5E1;cursor:not-allowed;}
+.body{padding:20px 24px 18px;}
+.bar{height:6px;background:#E2E8F0;border-radius:999px;overflow:hidden;margin-bottom:10px;}
+.fill{height:100%;width:65%;background:#4F46E5;}
+.pct{font-size:12px;color:#64748B;font-family:'Monaco',monospace;}
+</style></head><body>
+<div class="tabs">
+  <div class="tab active">PRD</div>
+  <div class="tab">기능 목록</div>
+  <div class="tab">기능 명세</div>
+  <div class="tab">API 문서</div>
+  <div class="tab disabled" title="생성되지 않은 문서">ERD</div>
+</div>
+<div class="body">
+  <div style="font-size:12px;color:#64748B;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;">진행률 · 65%</div>
+  <div class="bar"><div class="fill"></div></div>
+  <div class="pct">4/5 문서 생성됨</div>
+</div>
+</body></html>

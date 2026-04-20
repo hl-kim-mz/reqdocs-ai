@@ -1,0 +1,28 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+body{margin:0;background:#fff;font-family:var(--font-sans);padding:22px 26px;}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.card{display:flex;flex-direction:column;gap:10px;}
+.pill{display:inline-block;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:500;}
+.h{font-size:12px;font-weight:700;color:var(--color-text);}
+.v{font-family:var(--font-mono);font-size:10px;color:var(--color-text-sub);}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle;}
+</style></head><body>
+<div class="row">
+  <div class="card">
+    <div class="h"><span class="dot" style="background:#22C55E"></span>Success</div>
+    <span class="pill" style="background:#F0FDF4;color:#15803D;border:1px solid #BBF7D0;">완료</span>
+    <div class="v">#22C55E · bg #F0FDF4 · ink #15803D</div>
+  </div>
+  <div class="card">
+    <div class="h"><span class="dot" style="background:#F59E0B"></span>Warning</div>
+    <span class="pill" style="background:#FFFBEB;color:#B45309;border:1px solid #FDE68A;">입력이 너무 깁니다</span>
+    <div class="v">#F59E0B · bg #FFFBEB · ink #B45309</div>
+  </div>
+  <div class="card">
+    <div class="h"><span class="dot" style="background:#EF4444"></span>Error</div>
+    <span class="pill" style="background:#FEF2F2;color:#B91C1C;border:1px solid #FECACA;">오류가 발생했습니다</span>
+    <div class="v">#EF4444 · bg #FEF2F2 · ink #B91C1C</div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+body{margin:0;background:#F8FAFC;font-family:var(--font-sans);padding:22px 26px;}
+.card{background:#fff;border:1px solid #E2E8F0;border-radius:8px;padding:16px;transition:border-color 150ms;}
+.card:hover{border-color:#CBD5E1;}
+.head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;}
+.meta{display:flex;align-items:center;gap:10px;}
+.id{font-family:'Monaco',monospace;font-size:11px;color:#94A3B8;}
+.pill{font-size:11px;padding:3px 8px;border-radius:4px;border:1px solid;font-weight:500;}
+.must{background:#FEE2E2;color:#B91C1C;border-color:#FECACA;}
+.actions{display:flex;gap:2px;}
+.ic{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;color:#94A3B8;border-radius:6px;cursor:pointer;}
+.ic:hover{color:#4F46E5;background:#F1F5F9;}
+.ic.del:hover{color:#EF4444;}
+.title{font-size:14px;font-weight:500;color:#0F172A;margin-bottom:3px;}
+.desc{font-size:12px;color:#64748B;line-height:1.5;}
+.src{font-size:11px;color:#94A3B8;font-style:italic;border-left:2px solid #E2E8F0;padding-left:8px;margin-top:8px;}
+</style></head><body>
+<div class="card">
+  <div class="head">
+    <div class="meta">
+      <span class="id">REQ-001</span>
+      <span class="pill must">Must Have ▾</span>
+    </div>
+    <div class="actions">
+      <span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.17 6.8a1 1 0 0 0-3.99-3.99L3.84 16.17a2 2 0 0 0-.5.83l-1.32 4.35a.5.5 0 0 0 .62.62l4.36-1.32a2 2 0 0 0 .83-.5z"/></svg></span>
+      <span class="ic del"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span>
+    </div>
+  </div>
+  <div class="title">사용자 로그인</div>
+  <div class="desc">이메일/비밀번호로 로그인, 소셜 로그인(Google) 지원</div>
+  <div class="src">출처: 회의록 3페이지 — "인증은 필수"</div>
+</div>
+</body></html>

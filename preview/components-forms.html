@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+body{margin:0;background:#fff;font-family:var(--font-sans);padding:22px 26px;color:var(--color-text-body);}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.field{display:flex;flex-direction:column;gap:6px;}
+label{font-size:13px;font-weight:500;color:#334155;}
+.inp{padding:10px 14px;border:1px solid #CBD5E1;border-radius:8px;font-size:14px;font-family:inherit;outline:none;background:#fff;color:#0F172A;}
+.inp::placeholder{color:#94A3B8;}
+.inp:focus{box-shadow:0 0 0 2px #6366F1;border-color:#6366F1;}
+.inp-focus{box-shadow:0 0 0 2px #6366F1;border-color:#6366F1;}
+textarea.inp{min-height:60px;resize:vertical;font-family:inherit;}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;color:#334155;padding:4px 0;}
+.chk input{accent-color:#4F46E5;width:16px;height:16px;}
+</style></head><body>
+<div class="grid">
+  <div class="field"><label>이메일</label><input class="inp" value="you@example.com"></div>
+  <div class="field"><label>비밀번호 <span style="color:#94A3B8;font-weight:400;">· focus</span></label><input class="inp inp-focus" type="password" value="••••••••"></div>
+  <div class="field" style="grid-column:1/-1"><label>프로젝트 이름</label><input class="inp" placeholder="프로젝트 이름을 입력하세요"></div>
+  <div class="field" style="grid-column:1/-1"><label>요구사항 입력</label><textarea class="inp" placeholder="여기에 요구사항을 붙여넣어 보세요"></textarea></div>
+  <div style="grid-column:1/-1;display:flex;gap:18px;">
+    <label class="chk"><input type="checkbox" checked>PRD</label>
+    <label class="chk"><input type="checkbox" checked>기능 목록</label>
+    <label class="chk"><input type="checkbox">API 문서</label>
+    <label class="chk"><input type="checkbox">ERD</label>
+  </div>
+</div>
+</body></html>

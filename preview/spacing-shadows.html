@@ -1,0 +1,21 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+body{margin:0;background:#F8FAFC;font-family:var(--font-sans);padding:22px 26px;}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.card{background:#fff;border:1px solid var(--slate-200);border-radius:8px;padding:14px;min-height:64px;display:flex;flex-direction:column;justify-content:center;}
+.n{font-size:11px;font-weight:600;color:var(--color-text);margin-bottom:4px;}
+.v{font-family:var(--font-mono);font-size:10px;color:var(--color-text-sub);}
+.card.xs{box-shadow:0 1px 2px 0 rgba(15,23,42,.04);}
+.card.sm{box-shadow:0 1px 3px 0 rgba(15,23,42,.06),0 1px 2px -1px rgba(15,23,42,.04);}
+.card.md{box-shadow:0 4px 6px -1px rgba(15,23,42,.08),0 2px 4px -2px rgba(15,23,42,.04);}
+.card.lg{box-shadow:0 10px 15px -3px rgba(15,23,42,.08),0 4px 6px -4px rgba(15,23,42,.04);}
+.note{grid-column:1/-1;font-size:11px;color:var(--color-text-sub);margin-top:8px;}
+</style></head><body>
+<div class="row">
+  <div class="card"><div class="n">border only</div><div class="v">default · flat</div></div>
+  <div class="card xs"><div class="n">shadow-xs</div><div class="v">+1px soft</div></div>
+  <div class="card sm"><div class="n">shadow-sm</div><div class="v">landing cards</div></div>
+  <div class="card md"><div class="n">shadow-md</div><div class="v">menus</div></div>
+</div>
+<div class="note">System is border-first. Shadows used sparingly; most surfaces in-app are borderless-shadow flat.</div>
+</body></html>

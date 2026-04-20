@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" class="dark"><head><meta charset="utf-8"><title>Dark — Surfaces</title>
+<link rel="stylesheet" href="../colors_and_type.css?v=3">
+<style>
+  html,body{margin:0;padding:0;background:var(--color-surface-sub);}
+  .card{padding:22px 24px;font-family:var(--font-sans);color:var(--color-text-body);display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .layer{border-radius:12px;padding:14px 16px;border:1px solid var(--color-border);}
+  .l1{background:var(--color-surface-sub);}
+  .l2{background:var(--color-surface);}
+  .l3{background:var(--color-surface-muted);}
+  .lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--color-text-sub);margin-bottom:6px;}
+  .val{font-family:var(--font-mono);font-size:11px;color:var(--color-text-muted);}
+  .name{font-size:14px;font-weight:600;color:var(--color-text);margin-bottom:4px;}
+  .hint{font-size:12px;color:var(--color-text-body);line-height:1.5;}
+</style></head><body><div class="card">
+  <div class="layer l1">
+    <div class="lbl">Layer 1</div>
+    <div class="name">Page bg</div>
+    <div class="val">#0B1220</div>
+    <div class="hint" style="margin-top:6px;">App background — behind all cards</div>
+  </div>
+  <div class="layer l2">
+    <div class="lbl">Layer 2</div>
+    <div class="name">Surface</div>
+    <div class="val">#111827</div>
+    <div class="hint" style="margin-top:6px;">Cards, panels, inputs</div>
+  </div>
+  <div class="layer l3">
+    <div class="lbl">Layer 3</div>
+    <div class="name">Muted</div>
+    <div class="val">#1E293B</div>
+    <div class="hint" style="margin-top:6px;">Code, table header, raised</div>
+  </div>
+</div></body></html>

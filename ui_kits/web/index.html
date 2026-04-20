@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>ReqDocs AI — Web UI Kit</title>
+  <link rel="stylesheet" href="../../colors_and_type.css?v=3">
+  <style>
+    html,body,#root{height:100%;margin:0;overflow:hidden;}
+    body { background: var(--color-surface-sub); color: var(--color-text-body); }
+
+    /* Markdown content styling — adapts via CSS tokens */
+    .md-content h1 { font-size: 26px; font-weight: 700; color: var(--color-text); margin: 0 0 16px; }
+    .md-content h2 { font-size: 18px; font-weight: 600; color: var(--color-text); margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--color-border); }
+    .md-content p  { font-size: 14px; color: var(--color-text-body); line-height: 1.7; margin: 0 0 8px; }
+    .md-content li { font-size: 14px; color: var(--color-text-body); line-height: 1.7; margin-left: 20px; }
+
+    /* Theme toggle chip */
+    .theme-chip { position: fixed; bottom: 12px; left: 12px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 999px; padding: 6px 12px; font-size: 12px; font-family: var(--font-sans); color: var(--color-text-body); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; z-index: 101; box-shadow: var(--shadow-sm); }
+    .theme-chip:hover { background: var(--color-surface-muted); }
+
+    /* Dev route switcher — token-based */
+    .route-switch { position: fixed; bottom: 12px; right: 12px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 4px; display: flex; gap: 2px; font-size: 12px; font-family: var(--font-sans); box-shadow: var(--shadow-sm); z-index: 100; }
+    .route-switch button { padding: 6px 10px; border: 0; background: transparent; cursor: pointer; border-radius: 6px; color: var(--color-text-body); font-family: inherit; }
+    .route-switch button:hover { background: var(--color-surface-muted); }
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="root" data-screen-label="ReqDocs Web UI Kit"></div>
+  <button id="theme-toggle" class="theme-chip" onclick="(function(){var h=document.documentElement;var d=h.classList.toggle('dark');localStorage.setItem('reqdocs_theme', d?'dark':'light');document.getElementById('theme-toggle').textContent=d?'☾ Dark':'☀ Light';})();">☀ Light</button>
+  <script>
+    (function(){
+      var t = localStorage.getItem('reqdocs_theme') || 'light';
+      if (t==='dark') document.documentElement.classList.add('dark');
+      document.addEventListener('DOMContentLoaded', function(){
+        var b = document.getElementById('theme-toggle');
+        if (b) b.textContent = (t==='dark') ? '☾ Dark' : '☀ Light';
+      });
+    })();
+  </script>
+  <script type="text/babel" src="Primitives.jsx"></script>
+  <script type="text/babel" src="AppShell.jsx"></script>
+  <script type="text/babel" src="Screens.jsx"></script>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    function App() {
+      const [route, setRoute] = useState(() => localStorage.getItem('reqdocs_route') || 'new');
+      useEffect(() => { localStorage.setItem('reqdocs_route', route); }, [route]);
+      const projects = [
+        { id:'p1', title:'쇼핑몰 리뉴얼 v2' },
+        { id:'p2', title:'CRM 시스템 리뉴얼' },
+      ];
+      if (route === 'landing') return <Landing onStart={()=>setRoute('new')}/>;
+      const shellProps = { currentNav: route, onNav: setRoute, projects };
+      if (route === 'new')       return <AppShell {...shellProps}><NewProject onStructure={()=>setRoute('structure')}/></AppShell>;
+      if (route === 'structure') return <AppShell {...shellProps}><StructureReview onGenerate={()=>setRoute('viewer')}/></AppShell>;
+      if (route === 'viewer')    return <AppShell {...shellProps}><Viewer projectTitle="쇼핑몰 리뉴얼 v2"/></AppShell>;
+      return <Landing onStart={()=>setRoute('new')}/>;
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+  <div class="route-switch">
+    <button onclick="localStorage.setItem('reqdocs_route','landing');location.reload()">Landing</button>
+    <button onclick="localStorage.setItem('reqdocs_route','new');location.reload()">New</button>
+    <button onclick="localStorage.setItem('reqdocs_route','structure');location.reload()">Structure</button>
+    <button onclick="localStorage.setItem('reqdocs_route','viewer');location.reload()">Viewer</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,262 @@
+/* =============================================================
+   ReqDocs AI — Colors & Type Tokens
+   Source: web/tailwind.config.ts, web/src/app/globals.css,
+           docs/05_components.md (§3 Design Tokens)
+   ============================================================= */
+
+:root {
+  /* ---------- Brand ---------- */
+  --brand-primary: #4F46E5;       /* Indigo-600 — brand (Tailwind primary) */
+  --brand-primary-600: #4F46E5;
+  --brand-primary-700: #4338CA;   /* hover */
+  --brand-primary-500: #6366F1;   /* accent variant noted in docs */
+  --brand-primary-50:  #EEF2FF;   /* subtle bg / hover surface */
+  --brand-primary-100: #E0E7FF;
+  --brand-primary-ink: #4338CA;   /* text on tinted surfaces */
+
+  /* ---------- Neutrals (Tailwind Slate) ---------- */
+  --slate-50:  #F8FAFC;  /* page bg */
+  --slate-100: #F1F5F9;  /* code bg / table header */
+  --slate-200: #E2E8F0;  /* border */
+  --slate-300: #CBD5E1;  /* stronger border / blockquote */
+  --slate-400: #94A3B8;  /* placeholder / meta */
+  --slate-500: #64748B;  /* text-sub */
+  --slate-600: #475569;  /* body secondary */
+  --slate-700: #334155;  /* body */
+  --slate-800: #1E293B;  /* body strong (global body color) */
+  --slate-900: #0F172A;  /* headings */
+
+  /* ---------- Semantic ---------- */
+  --color-surface:      #FFFFFF;
+  --color-surface-sub:  var(--slate-50);
+  --color-surface-muted:var(--slate-100);
+  --color-border:       var(--slate-200);
+  --color-border-hover: var(--slate-300);
+  --color-text:         var(--slate-900);
+  --color-text-body:    var(--slate-800);
+  --color-text-sub:     var(--slate-500);
+  --color-text-muted:   var(--slate-400);
+
+  --color-success: #22C55E;  --color-success-bg: #F0FDF4;  --color-success-ink: #15803D;
+  --color-warning: #F59E0B;  --color-warning-bg: #FFFBEB;  --color-warning-ink: #B45309;
+  --color-error:   #EF4444;  --color-error-bg:   #FEF2F2;  --color-error-ink:   #B91C1C;
+
+  /* ---------- Document-type accents ---------- */
+  --doc-prd:      #818CF8; /* indigo-400 */
+  --doc-features: #34D399; /* emerald-400 */
+  --doc-spec:     #60A5FA; /* blue-400 */
+  --doc-api:      #F472B6; /* pink-400 */
+  --doc-erd:      #FB923C; /* orange-400 */
+
+  /* ---------- MoSCoW priority ---------- */
+  --moscow-must-bg:   #FEE2E2;  --moscow-must-ink:   #B91C1C;  --moscow-must-border:   #FECACA;
+  --moscow-should-bg: #FFEDD5;  --moscow-should-ink: #C2410C;  --moscow-should-border: #FED7AA;
+  --moscow-could-bg:  #FEF3C7;  --moscow-could-ink:  #A16207;  --moscow-could-border:  #FDE68A;
+  --moscow-wont-bg:   #F1F5F9;  --moscow-wont-ink:   #64748B;  --moscow-wont-border:   #E2E8F0;
+
+  /* ---------- HTTP methods ---------- */
+  --method-get:    #3B82F6;
+  --method-post:   #22C55E;
+  --method-put:    #F59E0B;
+  --method-delete: #EF4444;
+
+  /* ---------- Typography ---------- */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Pretendard',
+               'Roboto', 'Apple SD Gothic Neo', 'Noto Sans KR',
+               'Helvetica Neue', sans-serif;
+  --font-mono: 'Monaco', 'Courier New', ui-monospace, SFMono-Regular, monospace;
+
+  --fs-display: 3.75rem;   /* 60 — landing hero */
+  --fs-h1:      1.875rem;  /* 30 — page title in docs */
+  --fs-h2:      1.5rem;    /* 24 */
+  --fs-h3:      1.25rem;   /* 20 — card title */
+  --fs-h4:      1.125rem;  /* 18 — section head */
+  --fs-body:    0.875rem;  /* 14 — default UI text */
+  --fs-body-lg: 1rem;      /* 16 */
+  --fs-sm:      0.8125rem; /* 13 */
+  --fs-xs:      0.75rem;   /* 12 — meta / id / labels */
+
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semibold:600;
+  --fw-bold:    700;
+
+  --lh-tight:   1.2;
+  --lh-snug:    1.4;
+  --lh-body:    1.625;
+
+  /* ---------- Radii ---------- */
+  --radius-xs: 4px;     /* priority pill / code */
+  --radius-sm: 6px;     /* small controls */
+  --radius-md: 8px;     /* buttons, inputs, cards (rounded-lg) */
+  --radius-lg: 12px;    /* surface cards (rounded-xl) */
+  --radius-full: 9999px;
+
+  /* ---------- Spacing scale (Tailwind) ---------- */
+  --space-1: 4px;   --space-2: 8px;   --space-3: 12px;
+  --space-4: 16px;  --space-5: 20px;  --space-6: 24px;
+  --space-8: 32px;  --space-10: 40px; --space-12: 48px;
+  --space-16: 64px; --space-20: 80px;
+
+  /* ---------- Layout ---------- */
+  --layout-topbar: 64px;
+  --layout-sidebar: 240px;
+  --layout-sidebar-sm: 64px;
+  --layout-side-panel: 288px; /* w-72 */
+
+  /* ---------- Shadows (soft, flat) ---------- */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+
+  /* ---------- Focus ring ---------- */
+  --ring-focus: 0 0 0 2px var(--brand-primary-500);
+  --ring-focus-ring: 0 0 0 2px rgba(99, 102, 241, 0.5);
+
+  /* ---------- Motion ---------- */
+  --dur-fast: 150ms;
+  --dur-base: 200ms;
+  --dur-slow: 300ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =============================================================
+   Dark mode — applies via `.dark` class on <html> or <body>,
+   or via system preference when no class is set.
+   Brand indigo shifts to --brand-primary-500 (#6366F1) for
+   better contrast on dark surfaces; neutrals invert to Slate-900→50.
+   ============================================================= */
+
+.dark, :root.dark {
+  /* Brand — lighter indigo reads better on dark bg */
+  --brand-primary:      #6366F1;   /* Indigo-500 on dark */
+  --brand-primary-600:  #6366F1;
+  --brand-primary-700:  #818CF8;   /* hover goes lighter in dark */
+  --brand-primary-500:  #818CF8;
+  --brand-primary-50:   #1E1B4B;   /* Indigo-950 — subtle tinted surface */
+  --brand-primary-100:  #312E81;   /* Indigo-900 */
+  --brand-primary-ink:  #C7D2FE;   /* Indigo-200 — text on tinted surfaces */
+
+  /* Neutrals — inverted Slate ramp */
+  --slate-50:  #0B1220;  /* page bg (deeper than slate-900) */
+  --slate-100: #0F172A;  /* muted surface */
+  --slate-200: #1E293B;  /* border */
+  --slate-300: #334155;  /* stronger border */
+  --slate-400: #64748B;  /* placeholder / meta */
+  --slate-500: #94A3B8;  /* text-sub */
+  --slate-600: #CBD5E1;  /* body secondary */
+  --slate-700: #E2E8F0;  /* body */
+  --slate-800: #F1F5F9;  /* body strong */
+  --slate-900: #F8FAFC;  /* headings */
+
+  /* Semantic — surface = elevated slate; text inverts */
+  --color-surface:       #111827;  /* card bg */
+  --color-surface-sub:   #0B1220;  /* page bg */
+  --color-surface-muted: #1E293B;  /* raised / code / table head */
+  --color-border:        #1F2937;
+  --color-border-hover:  #334155;
+  --color-text:          #F8FAFC;
+  --color-text-body:     #E2E8F0;
+  --color-text-sub:      #94A3B8;
+  --color-text-muted:    #64748B;
+
+  /* Semantic accents — darker bg, lighter ink */
+  --color-success: #22C55E;  --color-success-bg: #052E16;  --color-success-ink: #86EFAC;
+  --color-warning: #F59E0B;  --color-warning-bg: #451A03;  --color-warning-ink: #FCD34D;
+  --color-error:   #EF4444;  --color-error-bg:   #450A0A;  --color-error-ink:   #FCA5A5;
+
+  /* Document-type accents — same hue family, lighter so they pop on dark */
+  --doc-prd:      #A5B4FC;
+  --doc-features: #6EE7B7;
+  --doc-spec:     #93C5FD;
+  --doc-api:      #F9A8D4;
+  --doc-erd:      #FDBA74;
+
+  /* MoSCoW — tinted backgrounds on dark */
+  --moscow-must-bg:   #450A0A;  --moscow-must-ink:   #FCA5A5;  --moscow-must-border:   #7F1D1D;
+  --moscow-should-bg: #431407;  --moscow-should-ink: #FDBA74;  --moscow-should-border: #7C2D12;
+  --moscow-could-bg:  #451A03;  --moscow-could-ink:  #FCD34D;  --moscow-could-border:  #78350F;
+  --moscow-wont-bg:   #1E293B;  --moscow-wont-ink:   #94A3B8;  --moscow-wont-border:   #334155;
+
+  /* HTTP methods — unchanged (color fills stay vivid on dark chips) */
+
+  /* Shadows — deeper, rely on borders more than shadows in dark mode */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.40);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.45), 0 1px 2px -1px rgba(0, 0, 0, 0.30);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.50), 0 2px 4px -2px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.55), 0 4px 6px -4px rgba(0, 0, 0, 0.35);
+
+  /* Focus ring — softer on dark */
+  --ring-focus-ring: 0 0 0 2px rgba(129, 140, 248, 0.55);
+
+  color-scheme: dark;
+}
+
+/* Honor OS preference when no explicit class is set */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --brand-primary: #6366F1; --brand-primary-600: #6366F1; --brand-primary-700: #818CF8;
+    --brand-primary-500: #818CF8; --brand-primary-50: #1E1B4B; --brand-primary-100: #312E81; --brand-primary-ink: #C7D2FE;
+    --slate-50: #0B1220; --slate-100: #0F172A; --slate-200: #1E293B; --slate-300: #334155;
+    --slate-400: #64748B; --slate-500: #94A3B8; --slate-600: #CBD5E1; --slate-700: #E2E8F0;
+    --slate-800: #F1F5F9; --slate-900: #F8FAFC;
+    --color-surface: #111827; --color-surface-sub: #0B1220; --color-surface-muted: #1E293B;
+    --color-border: #1F2937; --color-border-hover: #334155;
+    --color-text: #F8FAFC; --color-text-body: #E2E8F0; --color-text-sub: #94A3B8; --color-text-muted: #64748B;
+    --color-success-bg: #052E16; --color-success-ink: #86EFAC;
+    --color-warning-bg: #451A03; --color-warning-ink: #FCD34D;
+    --color-error-bg:   #450A0A; --color-error-ink:   #FCA5A5;
+    --doc-prd: #A5B4FC; --doc-features: #6EE7B7; --doc-spec: #93C5FD; --doc-api: #F9A8D4; --doc-erd: #FDBA74;
+    --moscow-must-bg: #450A0A; --moscow-must-ink: #FCA5A5; --moscow-must-border: #7F1D1D;
+    --moscow-should-bg: #431407; --moscow-should-ink: #FDBA74; --moscow-should-border: #7C2D12;
+    --moscow-could-bg: #451A03; --moscow-could-ink: #FCD34D; --moscow-could-border: #78350F;
+    --moscow-wont-bg: #1E293B; --moscow-wont-ink: #94A3B8; --moscow-wont-border: #334155;
+    --shadow-xs: 0 1px 2px 0 rgba(0,0,0,.40);
+    --shadow-sm: 0 1px 3px 0 rgba(0,0,0,.45), 0 1px 2px -1px rgba(0,0,0,.30);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,.50), 0 2px 4px -2px rgba(0,0,0,.35);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.55), 0 4px 6px -4px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+}
+
+/* ---------- Base ---------- */
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--color-text-body);
+  background-color: var(--color-surface-sub);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Semantic type styles ---------- */
+.h-display { font-size: var(--fs-display); font-weight: var(--fw-bold);    line-height: var(--lh-tight); color: var(--color-text); letter-spacing: -0.02em; }
+h1, .h1   { font-size: var(--fs-h1);      font-weight: var(--fw-bold);    line-height: var(--lh-tight); color: var(--color-text); }
+h2, .h2   { font-size: var(--fs-h2);      font-weight: var(--fw-semibold);line-height: var(--lh-snug);  color: var(--color-text); }
+h3, .h3   { font-size: var(--fs-h3);      font-weight: var(--fw-semibold);line-height: var(--lh-snug);  color: var(--color-text); }
+h4, .h4   { font-size: var(--fs-h4);      font-weight: var(--fw-semibold);line-height: var(--lh-snug);  color: var(--color-text); }
+
+p         { font-size: var(--fs-body);    line-height: var(--lh-body); color: var(--color-text-body); }
+.body-lg  { font-size: var(--fs-body-lg); line-height: var(--lh-body); color: var(--color-text-body); }
+.meta     { font-size: var(--fs-xs);      color: var(--color-text-sub); }
+.mono     { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--color-text-muted); }
+
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-sub);
+}
+
+code {
+  background: var(--color-surface-muted);
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: #D63384;
+}
