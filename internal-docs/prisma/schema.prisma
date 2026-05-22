@@ -1,0 +1,74 @@
+// 사내 문서 렌더링 — Prisma 스키마
+// 개발: SQLite / 운영: PostgreSQL 로 provider만 교체
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String      @id @default(cuid())
+  email     String      @unique
+  name      String?
+  image     String?
+  docs      SharedDoc[]
+  views     DocView[]
+  createdAt DateTime    @default(now())
+}
+
+model SharedDoc {
+  id          String       @id @default(cuid())
+  slug        String       @unique
+  ownerId     String
+  title       String
+  summary     String?
+  format      String       // "md" | "html"
+  storagePath String
+  visibility  String       @default("ORG") // "ORG" | "PRIVATE"
+  expiresAt   DateTime?
+  views       Int          @default(0)
+  deletedAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  owner       User         @relation(fields: [ownerId], references: [id])
+  versions    DocVersion[]
+  assets      DocAsset[]
+  viewLogs    DocView[]
+
+  @@index([ownerId])
+  @@index([deletedAt])
+}
+
+model DocVersion {
+  id          String    @id @default(cuid())
+  docId       String
+  storagePath String
+  note        String?
+  createdAt   DateTime  @default(now())
+  doc         SharedDoc @relation(fields: [docId], references: [id], onDelete: Cascade)
+}
+
+model DocAsset {
+  id          String    @id @default(cuid())
+  docId       String
+  filename    String
+  storagePath String
+  mimeType    String
+  doc         SharedDoc @relation(fields: [docId], references: [id], onDelete: Cascade)
+}
+
+model DocView {
+  id        String    @id @default(cuid())
+  docId     String
+  viewerId  String?
+  viewedAt  DateTime  @default(now())
+  userAgent String?
+  doc       SharedDoc @relation(fields: [docId], references: [id], onDelete: Cascade)
+  viewer    User?     @relation(fields: [viewerId], references: [id])
+
+  @@index([docId])
+}
